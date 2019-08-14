@@ -1,0 +1,21 @@
+.dialog-enter {
+    opacity: 0.01;
+    transform: translateX(-10px);
+}
+
+.dialog-enter-active {
+    opacity: 1;
+    transform: translateX(0px);
+    transition: all 200ms;
+}
+
+.dialog-exit {
+    transform: translateX(0px);
+    opacity: 1;
+}
+
+.dialog-exit-active {
+    opacity: 0.01;
+    transform: translateX(-10px);
+    transition: all 200ms;
+}

@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Menu from "./composants/interface/Menu";
 import Entete from "./composants/interface/Entete";
 import Sujets from "./composants/interface/Sujets";
 import Home from "./composants/interface/Home";
+
 
 const ConteneurGlobal = styled.div`
     width: 100vw;
@@ -20,19 +21,21 @@ const ConteneurPage = styled.div`
     min-height: 100vh;
 `;
 
-const App = () => {
+const App = (props) => {
     return (
-        <ConteneurGlobal>
-            <ConteneurPage>
-                <Entete />
-                <Menu />
+        <Router>
+            <ConteneurGlobal>
+                <ConteneurPage>
+                    <Entete />
+                    <Menu />
 
-                <Router>
-                    <Route exact path="/" component={Home} />
-                    <Route path="/Recherche" component={Sujets} />
-                </Router>
-            </ConteneurPage>
-        </ConteneurGlobal>
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route path="/Recherche" component={Sujets} />
+                    </Switch>
+                </ConteneurPage>
+            </ConteneurGlobal>
+        </Router>
     );
 };
 

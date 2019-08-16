@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import axios from "axios";
-import Notion from "./Notions";
+import MenuOptions from "./MenuOptions";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import "./index.css";
+import ChampsSel from "./ChampsSel";
 
 const ConteneurRecherche = styled.div`
     background-color: rgba(246, 148, 0, 0.3);
@@ -12,6 +12,13 @@ const ConteneurRecherche = styled.div`
     flex-direction: column;
     min-height: calc(100vh - 231px);
 `;
+
+const ConteneurFiltre = styled.div`
+    background-color: rgba(246, 148, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+`;
+
 const Titre = styled.div`
     color: white;
     margin: 12px;
@@ -48,28 +55,46 @@ const ChampOptions = styled.div`
 `;
 
 const Recherche = (props) => {
-    const menuEtat = () => {
-        props.dispatch({ type: "MENU_SWITCH" });
+    const GenFiltres = () => {
+        return props.menu.map((el) => {
+            let nom = Object.keys(el);
+            return (
+                <Champ
+                    key={`Champ-${nom[0]}`}
+                    onClick={() => menuEtat(Object.keys(el))}
+                >
+                    <ChampTitre key={`ChampTitre-${nom[0]}`}>
+                        {el[Object.keys(el)]}
+                    </ChampTitre>
+                    <ChampOptions key={`ChampOptions-${nom[0]}`}>
+                        <ChampsSel
+                            valeur={nom[0]}
+                            key={`NotionsSel-${nom[0]}`}
+                        />
+                    </ChampOptions>
+                </Champ>
+            );
+        });
     };
 
-    const NotionsSel = () => {
-        if (props.notionsCochees.length === 0) {
-            return "Toutes";
-        } else {
-            return props.notionsCochees.join(", ").toLowerCase();
-        }
+    const Filtres = () => {
+        return (
+            <ConteneurFiltre>
+                <GenFiltres />
+            </ConteneurFiltre>
+        );
+    };
+
+    const menuEtat = (nomFiltre) => {
+        props.dispatch({ type: "MENU_SWITCH", value: nomFiltre });
+        console.log(nomFiltre);
     };
 
     return (
         <div style={{ flex: "3" }}>
             <ConteneurRecherche>
                 <Titre>Recherche de sujets :</Titre>
-                <Champ onClick={menuEtat}>
-                    <ChampTitre>Notions</ChampTitre>
-                    <ChampOptions>
-                        <NotionsSel />
-                    </ChampOptions>
-                </Champ>
+                <Filtres />
             </ConteneurRecherche>
             <TransitionGroup component={null}>
                 {props.MenuOF && (
@@ -78,7 +103,7 @@ const Recherche = (props) => {
                         classNames="dialog"
                         timeout={200}
                     >
-                        <Notion className="dialog" />
+                        <MenuOptions className="dialog" />
                     </CSSTransition>
                 )}
             </TransitionGroup>
@@ -88,8 +113,9 @@ const Recherche = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        MenuOF: state.recherche.MenuO,
-        notionsCochees: state.recherche.elementsCoches.notions
+        MenuOF: state.recherche.MenuOptions.etat,
+        notionsCochees: state.recherche.elementsCoches.notions,
+        menu: state.recherche.elementsMenu.menu
     };
 };
 

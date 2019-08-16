@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Recherche from "./Recherche";
 import axios from "axios";
 import { connect } from "react-redux";
+import Resultats from "./Resultats/Resultats";
 
 const ConteneurGlobalSujets = styled.div`
     display: flex;
@@ -11,23 +12,24 @@ const ConteneurGlobalSujets = styled.div`
     height: 100%;
 `;
 
-const Resultats = styled.div`
-    flex: 9;
-`;
-
 const ax = axios.create({
-    baseURL: "http://192.168.0.85:4000/",
+    baseURL: "http://78.211.168.197:4000/",
     responseType: "json"
 });
 
 const Sujets = (props) => {
-    console.log(props);
+    const { resultats } = props;
     useEffect(() => {
-        if (props.menu.notions.length === 0) {
-            ax.get("/notions")
-                .then((t) => props.dispatch({ type: "NOTIONS_MENU", value: t }))
+        console.log("Appel Menu");
+        ax.get("/menu")
+            .then((t) => props.dispatch({ type: "MENU", value: t }))
+            .catch((err) => console.log(err));
+
+        /* if (resultats !== []) {
+            ax.post("/sujets")
+                .then((t) => props.dispatch({ type: "MENU", value: t }))
                 .catch((err) => console.log(err));
-        }
+        }*/
     }, []);
     return (
         <ConteneurGlobalSujets>
@@ -39,7 +41,10 @@ const Sujets = (props) => {
 };
 
 const mapsStateToProps = (state) => {
-    return { menu: state.recherche.elementsMenu };
+    return {
+        menu: state.recherche.elementsMenu,
+        resultats: state.recherche.Resultats.sujets
+    };
 };
 
 export default connect(mapsStateToProps)(Sujets);

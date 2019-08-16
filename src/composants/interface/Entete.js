@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Logo from "../svg/Logo.png";
-import Bg from "../svg/Capture.PNG";
+import Bg from "../svg/Capture.jpg";
 
 const ConteneurEntete = styled.div`
     display: flex;

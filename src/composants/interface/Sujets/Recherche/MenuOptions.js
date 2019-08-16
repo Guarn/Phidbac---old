@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
@@ -11,6 +11,7 @@ const Conteneur = styled.div`
     cursor: pointer;
     user-select: none;
     box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.2);
+    z-index: 100;
     &::after {
         content: "";
         position: absolute;
@@ -48,27 +49,37 @@ const Validation = () => {
     );
 };
 
-const Notions = (props) => {
+const MenuOptions = (props) => {
     const verifNotion = (tt) => {
         let newState = [];
-        if (props.elementsCoches.includes(tt)) {
-            let index = props.elementsCoches.findIndex((el) => el === tt);
+        if (props.elementsCoches[props.menu].includes(tt)) {
+            let index = props.elementsCoches[props.menu].findIndex(
+                (el) => el === tt
+            );
 
-            newState = [...props.elementsCoches];
+            newState = [...props.elementsCoches[props.menu]];
             newState.splice(index, 1);
         } else {
-            newState = [...props.elementsCoches, tt];
+            newState = [...props.elementsCoches[props.menu], tt];
         }
-        props.dispatch({ type: "NOTIONS_COCHEES", value: newState });
-        
+        props.dispatch({
+            type: "NOTIONS_COCHEES",
+            cat: [props.menu],
+            value: newState
+        });
     };
 
     const MapNot = () => {
-        return props.menuNotions.map((el) => {
+        return props.elementsMenu[props.menu].map((el) => {
             return (
-                <Champ key={el.Notion} onClick={() => verifNotion(el.Notion)}>
-                    {el.Notion}
-                    {props.elementsCoches.includes(el.Notion) && <Validation />}
+                <Champ
+                    key={el[Object.keys(el)]}
+                    onClick={() => verifNotion(el[Object.keys(el)])}
+                >
+                    {el[Object.keys(el)]}
+                    {props.elementsCoches[props.menu].includes(
+                        el[Object.keys(el)]
+                    ) && <Validation />}
                 </Champ>
             );
         });
@@ -83,9 +94,10 @@ const Notions = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        menuNotions: state.recherche.elementsMenu.notions,
-        elementsCoches: state.recherche.elementsCoches.notions
+        elementsMenu: state.recherche.elementsMenu,
+        elementsCoches: state.recherche.elementsCoches,
+        menu: state.recherche.MenuOptions.menu
     };
 };
 
-export default connect(mapStateToProps)(Notions);
+export default connect(mapStateToProps)(MenuOptions);

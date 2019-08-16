@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import LogoMenu from "../svg/Logo-menu.png";
 import { connect } from "react-redux";
-import { BrowserRouter as Router, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 const Conteneur = styled.div`
     height: 46px;
@@ -19,6 +19,7 @@ const Home = styled.div`
     justify-content: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 `;
 
 const BtnMenu = styled.div`
@@ -30,6 +31,8 @@ const BtnMenu = styled.div`
     display: flex;
     align-items: center;
     font-size: 1em;
+    cursor: pointer;
+    user-select: none;
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);
         color: black;
@@ -37,24 +40,25 @@ const BtnMenu = styled.div`
 `;
 
 const Menu = (props) => {
-    const [redirect, setRe] = useState(false);
-    let han = () => {
-        setRe(true);
+    const [red, setRed] = useState(false);
+    const [page, setPage] = useState("");
+    let han = (UrlPage) => {
+        setPage(UrlPage);
+        setRed(true);
     };
+
     return (
-        <Router>
-            <Conteneur>
-                {redirect && <Redirect to="/" />}
-                <Home onClick={() => han()}>
-                    <img src={LogoMenu} alt="a" height="25" width="25" />
-                </Home>
-                <BtnMenu>le programme et les épreuves</BtnMenu>
-                <BtnMenu>le cours</BtnMenu>
-                <BtnMenu>les exercices</BtnMenu>
-                <BtnMenu>les sujets</BtnMenu>
-                <BtnMenu>les index</BtnMenu>
-            </Conteneur>
-        </Router>
+        <Conteneur>
+            {red && <Redirect push to={page} />}
+            <Home onClick={() => han("/")}>
+                <img src={LogoMenu} alt="a" height="25" width="25" />
+            </Home>
+            <BtnMenu>le programme et les épreuves</BtnMenu>
+            <BtnMenu>le cours</BtnMenu>
+            <BtnMenu>les exercices</BtnMenu>
+            <BtnMenu onClick={() => han("/recherche")}>les sujets</BtnMenu>
+            <BtnMenu>les index</BtnMenu>
+        </Conteneur>
     );
 };
 

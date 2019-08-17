@@ -63,7 +63,7 @@ const MenuOptions = (props) => {
             newState = [...props.elementsCoches[props.menu], tt];
         }
         props.dispatch({
-            type: "NOTIONS_COCHEES",
+            type: "ELEMENTS_COCHES",
             cat: [props.menu],
             value: newState
         });

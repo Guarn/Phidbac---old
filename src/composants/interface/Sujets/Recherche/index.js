@@ -7,14 +7,13 @@ import "./index.css";
 import ChampsSel from "./ChampsSel";
 
 const ConteneurRecherche = styled.div`
-    background-color: rgba(246, 148, 0, 0.3);
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 231px);
 `;
 
 const ConteneurFiltre = styled.div`
-    background-color: rgba(246, 148, 0, 0.3);
+    
     display: flex;
     flex-direction: column;
 `;
@@ -91,7 +90,7 @@ const Recherche = (props) => {
     };
 
     return (
-        <div style={{ flex: "3" }}>
+    <div style={{backgroundColor:"rgba(246, 148, 0, 0.3)", flex: "3" }}>
             <ConteneurRecherche>
                 <Titre>Recherche de sujets :</Titre>
                 <Filtres />

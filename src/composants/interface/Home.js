@@ -99,6 +99,7 @@ const Home = (props) => {
                     particulières concernant les sujets.
                 </InfosBienvenue>
             </ConteneurBienvenue>
+           
         </Conteneur>
     );
 };

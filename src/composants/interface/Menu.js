@@ -54,9 +54,9 @@ const Menu = (props) => {
                 <img src={LogoMenu} alt="a" height="25" width="25" />
             </Home>
             <BtnMenu>le programme et les épreuves</BtnMenu>
-            <BtnMenu>le cours</BtnMenu>
+            <BtnMenu onClick={() => han("/Cours")}>le cours</BtnMenu>
             <BtnMenu>les exercices</BtnMenu>
-            <BtnMenu onClick={() => han("/recherche")}>les sujets</BtnMenu>
+            <BtnMenu onClick={() => han("/Recherche")}>les sujets</BtnMenu>
             <BtnMenu>les index</BtnMenu>
         </Conteneur>
     );

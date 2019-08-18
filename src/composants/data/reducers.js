@@ -1,6 +1,6 @@
 const etatInitial = {
     recherche: {
-        options: { affichage: "" },
+        options: { affichage: "complet", nbAffichageReduit: 10 },
         elementsMenu: {
             menu: [
                 { notions: "Notions" },
@@ -25,7 +25,7 @@ const etatInitial = {
             auteurs: [],
             sessions: []
         },
-        Resultats: { sujets: [], page: 0 },
+        Resultats: { sujets: [], page: 1, offset: 0, NBresultats: 0 },
         MenuOptions: { etat: false, menu: "" }
     }
 };
@@ -52,17 +52,77 @@ function Reducers(state = etatInitial, action) {
             console.log("Infos menu");
             console.log(nextState);
             return nextState || state;
-
         case "RESULTATS":
             console.log(action);
             nextState = {
                 recherche: {
                     ...state.recherche,
-                    Resultats: { sujets: action.value.data }
+                    Resultats: {
+                        ...state.recherche.Resultats,
+                        page: 1,
+                        sujets: action.value.data.rows,
+                        NBresultats: action.value.data.count
+                    }
                 }
             };
 
             console.log("MAJ Résultats");
+            console.log(nextState);
+            return nextState || state;
+        case "SUJET_SUIVANT":
+            if (
+                state.recherche.Resultats.page ===
+                state.recherche.Resultats.NBresultats
+            ) {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: 1
+                        }
+                    }
+                };
+            } else {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: state.recherche.Resultats.page + 1
+                        }
+                    }
+                };
+            }
+
+            console.log("MAJ PAGE");
+            console.log(nextState);
+            return nextState || state;
+        case "SUJET_PRECEDENT":
+            console.log(action);
+            if (state.recherche.Resultats.page === 1) {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: state.recherche.Resultats.NBresultats
+                        }
+                    }
+                };
+            } else {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: state.recherche.Resultats.page - 1
+                        }
+                    }
+                };
+            }
+
+            console.log("MAJ PAGE");
             console.log(nextState);
             return nextState || state;
         case "AFFICHAGE":

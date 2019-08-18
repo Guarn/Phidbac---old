@@ -13,7 +13,6 @@ const ConteneurRecherche = styled.div`
 `;
 
 const ConteneurFiltre = styled.div`
-    
     display: flex;
     flex-direction: column;
 `;
@@ -90,7 +89,7 @@ const Recherche = (props) => {
     };
 
     return (
-    <div style={{backgroundColor:"rgba(246, 148, 0, 0.3)", flex: "3" }}>
+        <div style={{ flex: "3" }}>
             <ConteneurRecherche>
                 <Titre>Recherche de sujets :</Titre>
                 <Filtres />

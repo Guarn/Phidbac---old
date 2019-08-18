@@ -7,7 +7,7 @@ const Conteneur = styled.div`
     flex: 9;
     display: flex;
     flex-direction: column;
-    padding: 50px;
+    padding: 30px;
 `;
 
 const ConteneurResultats = styled.div`
@@ -19,9 +19,8 @@ const Details = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 28px;
-
-    align-items: flex-end;
+    margin-left: 20px;
+    align-items: flex-start;
 `;
 
 const PartieGauche = styled.div`
@@ -29,32 +28,46 @@ const PartieGauche = styled.div`
     flex-direction: row;
 `;
 const Etiquette = styled.div`
-    background-color: rgba(246, 148, 0, 1);
     font-family: "Century Gothic";
     font-size: 0.7em;
     text-align: center;
     margin: auto;
     margin-right: 10px;
-    padding: 8px;
+    padding: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-top: none;
+    color: white;
+    border-radius: 0 0 5px 5px;
 `;
 
 const Edition = styled.div`
-    height: 24px;
-    width: 24px;
     position: relative;
     right: 30px;
-    background-color: rgba(255, 255, 255, 0.15);
+    padding: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-top: none;
+    color: white;
+    border-radius: 0 0 5px 5px;
+    font-family: "Century Gothic";
+    font-size: 0.7em;
+    text-align: center;
+    user-select: none;
+    cursor: pointer;
+
+    &:hover {
+        background-color: orange;
+    }
 `;
 const ConteneurSujets = styled.div`
     background-color: rgba(255, 255, 255, 0.15);
-    padding: 20px;
+    padding: 2px;
+    margin-top: 30px;
 `;
 
 const Sujet = styled.div`
     display: flex;
     flex-direction: column;
     background-color: rgba(0, 0, 0, 0.16);
-    padding: 10px;
     min-height: 60px;
     justify-content: space-between;
 `;
@@ -66,17 +79,13 @@ const TitreNotions = styled.div`
 `;
 
 const Titre = styled.div`
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.15);
     color: rgba(246, 148, 0, 1);
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 5px 10px;
     font-family: "Century Gothic";
-    font-size: 0.7em;
+    font-size: 1em;
     font-style: italic;
-    position: relative;
-    top: -20px;
-    left: 20px;
+
     z-index: 1;
 `;
 
@@ -85,16 +94,16 @@ const Notions = styled.div`
     font-family: "Century Gothic";
     font-size: 0.8em;
     font-style: italic;
+    margin-top: 5px;
+    margin-right: 5px;
 `;
 
 const CorpsSujet = styled.div`
     color: white;
-    font-family: "Roboto";
-    font-weight: lighter;
-`;
-
-const InterSujet = styled.div`
-    height: 30px;
+    font-family: "Century Gothic";
+    margin: 15px;
+    margin-top: 20px;
+    font-size: 1em;
 `;
 
 const ax = axios.create({
@@ -105,18 +114,66 @@ const ax = axios.create({
 const ConteneurChoix = styled.div`
     display: flex;
     flex-direction: row;
-    height: 20px;
+    height: 30px;
 `;
 
 const Choix = styled.div`
     box-sizing: border-box;
     margin-right: 10px;
+    width: 30px;
+    border: 0.5px solid rgba(255, 255, 255, 0.7);
+    border-radius: 3px 3px 3px 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        border: 0.5px solid orange;
+    }
+`;
+const Ligne = styled.div`
+    width: 10px;
+    border: 0.5px solid white;
+`;
+
+const ConteneurNumeroSujet = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+`;
+
+const SujetAvantApres = styled.div`
+    background-color: rgba(130, 130, 130, 1);
+    color: white;
+    height: 20px;
     width: 20px;
-    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    user-select: none;
+`;
+
+const NombreSujet = styled.div`
+    font-family: "Century Gothic";
+    color: white;
+    user-select: none;
 `;
 
 const Resultats = (props) => {
-    const { elementsCoches, resultats, dispatch, affichage } = props;
+    const {
+        elementsCoches,
+        resultats,
+        dispatch,
+        affichage,
+        page,
+        NBresultats
+    } = props;
     const affichageComplet = () => {
         dispatch({ type: "AFFICHAGE", value: "complet" });
     };
@@ -124,107 +181,139 @@ const Resultats = (props) => {
         dispatch({ type: "AFFICHAGE", value: "reduit" });
     };
     useEffect(() => {
-        console.log(elementsCoches);
-
+        console.log("USEEFFECT");
         ax.post("/resultats", { elementsCoches })
             .then((rep) => dispatch({ type: "RESULTATS", value: rep }))
             .catch((err) => console.log(err));
     }, [elementsCoches]);
 
+    const sujetSuivant = () => {
+        console.log("SUITE");
+        dispatch({ type: "SUJET_SUIVANT", action: true });
+    };
+    const sujetPrecedent = () => {
+        dispatch({ type: "SUJET_PRECEDENT" });
+    };
+
     const MapSujets = () => {
         if (affichage === "complet") {
-            return resultats.map((el) => (
+            let SujAff = resultats[page - 1];
+            return (
                 <ConteneurResultats>
-                    <Details>
-                        <PartieGauche>
-                            <Etiquette>{el.Annee}</Etiquette>
-                            <Etiquette>{`Série ${el.Serie}`}</Etiquette>
-                            <Etiquette>{el.Destination.join(" / ")}</Etiquette>
-                            <Etiquette>{el.Session}</Etiquette>
-                            <Etiquette>{el.Code}</Etiquette>
-                        </PartieGauche>
-                        <Edition />
-                    </Details>
                     <ConteneurSujets>
-                        <Sujet>
+                        <Sujet style={{ marginBottom: "2px" }}>
                             <TitreNotions>
-                                <Titre>Sujet 1</Titre>
-                                <Notions>{el.Notions1.join(" ")}</Notions>
+                                <Titre>1</Titre>
+                                <Notions>{SujAff.Notions1.join(" ")}</Notions>
                             </TitreNotions>
-                            <CorpsSujet>{el.Sujet1}</CorpsSujet>
+                            <CorpsSujet>{SujAff.Sujet1}</CorpsSujet>
                         </Sujet>
-                        <InterSujet />
-                        <Sujet>
+                        <Sujet style={{ marginBottom: "2px" }}>
                             <TitreNotions>
-                                <Titre>Sujet 2</Titre>
-                                <Notions>{el.Notions2.join(" ")}</Notions>
+                                <Titre>2</Titre>
+                                <Notions>{SujAff.Notions2.join(" ")}</Notions>
                             </TitreNotions>
-                            <CorpsSujet>{el.Sujet2}</CorpsSujet>
+                            <CorpsSujet>{SujAff.Sujet2}</CorpsSujet>
                         </Sujet>
-                        <InterSujet />
                         <Sujet>
                             <TitreNotions>
-                                <Titre>Sujet 3</Titre>
-                                <Notions>{el.Notions3.join(" ")}</Notions>
+                                <Titre>3</Titre>
+                                <Notions>{SujAff.Notions3.join(" ")}</Notions>
                             </TitreNotions>
-                            <CorpsSujet>{el.Sujet3}</CorpsSujet>
+                            <CorpsSujet
+                                style={{
+                                    textAlign: "justify",
+                                    textJustify: "inter-word"
+                                }}
+                            >
+                                {SujAff.Sujet3}
+                            </CorpsSujet>
                         </Sujet>
                     </ConteneurSujets>
-                    <InterSujet />
+                    <Details>
+                        <PartieGauche>
+                            <Etiquette>{SujAff.Annee}</Etiquette>
+                            <Etiquette>{`Série ${SujAff.Serie}`}</Etiquette>
+                            <Etiquette>
+                                {SujAff.Destination.join(" / ")}
+                            </Etiquette>
+                            <Etiquette>{SujAff.Session}</Etiquette>
+                            <Etiquette>{SujAff.Code}</Etiquette>
+                        </PartieGauche>
+                        <Edition>Signaler un problème</Edition>
+                    </Details>
                 </ConteneurResultats>
-            ));
+            );
         } else {
+            let listeSujets = [];
             return resultats.map((el) =>
                 elementsCoches.notions.map((not) => {
-                    if (el.Notions1.includes(not)) {
+                    if (
+                        !listeSujets.includes(el.id) &&
+                        el.Notions1.includes(not)
+                    ) {
+                        listeSujets.push(el.id);
+                        console.log(listeSujets);
                         return (
                             <ConteneurResultats>
                                 <ConteneurSujets>
                                     <Sujet>
                                         <TitreNotions>
-                                            <Titre>Sujet</Titre>
+                                            <Titre>1</Titre>
                                             <Notions>
                                                 {el.Notions1.join(" ")}
                                             </Notions>
                                         </TitreNotions>
                                         <CorpsSujet>{el.Sujet1}</CorpsSujet>
-                                        <InterSujet />
                                     </Sujet>
                                 </ConteneurSujets>
                             </ConteneurResultats>
                         );
-                    }
-                    if (el.Notions2.includes(not)) {
+                    } else if (
+                        !listeSujets.includes(el.id) &&
+                        el.Notions2.includes(not)
+                    ) {
+                        listeSujets.push(el.id);
+                        console.log(listeSujets);
                         return (
                             <ConteneurResultats>
                                 <ConteneurSujets>
                                     <Sujet>
                                         <TitreNotions>
-                                            <Titre>Sujet</Titre>
+                                            <Titre>2</Titre>
                                             <Notions>
                                                 {el.Notions2.join(" ")}
                                             </Notions>
                                         </TitreNotions>
                                         <CorpsSujet>{el.Sujet2}</CorpsSujet>
-                                        <InterSujet />
                                     </Sujet>
                                 </ConteneurSujets>
                             </ConteneurResultats>
                         );
-                    }
-                    if (el.Notions3.includes(not)) {
+                    } else if (
+                        !listeSujets.includes(el.id) &&
+                        el.Notions3.includes(not)
+                    ) {
+                        listeSujets.push(el.id);
+                        console.log(listeSujets);
                         return (
                             <ConteneurResultats>
                                 <ConteneurSujets>
                                     <Sujet>
                                         <TitreNotions>
-                                            <Titre>Sujet</Titre>
+                                            <Titre>3</Titre>
                                             <Notions>
                                                 {el.Notions3.join(" ")}
                                             </Notions>
                                         </TitreNotions>
-                                        <CorpsSujet>{el.Sujet3}</CorpsSujet>
-                                        <InterSujet />
+                                        <CorpsSujet
+                                            style={{
+                                                textAlign: "justify",
+                                                textJustify: "inter-word"
+                                            }}
+                                        >
+                                            {el.Sujet3}
+                                        </CorpsSujet>
                                     </Sujet>
                                 </ConteneurSujets>
                             </ConteneurResultats>
@@ -238,17 +327,35 @@ const Resultats = (props) => {
     return (
         <Conteneur>
             <ConteneurChoix>
-                <Choix onClick={() => affichageComplet()} />
-                <Choix onClick={() => affichageReduit()} />
+                <Choix onClick={() => affichageComplet()}>
+                    <Ligne />
+                </Choix>
+                <Choix onClick={() => affichageReduit()}>
+                    <Ligne />{" "}
+                    <Ligne style={{ marginTop: "2px", marginBottom: "2px" }} />{" "}
+                    <Ligne />
+                </Choix>
             </ConteneurChoix>
-            {resultats && <MapSujets />}
+            <ConteneurNumeroSujet>
+                <SujetAvantApres onClick={() => sujetPrecedent(page)}>
+                    {"<"}
+                </SujetAvantApres>
+                <NombreSujet>{`${page} / ${NBresultats}`}</NombreSujet>
+                <SujetAvantApres onClick={() => sujetSuivant(page)}>
+                    {">"}
+                </SujetAvantApres>
+            </ConteneurNumeroSujet>
+            {resultats.length > 0 && <MapSujets />}
         </Conteneur>
     );
 };
 
 const mapStateToProps = (state) => {
+    console.log("STATE");
     return {
         resultats: state.recherche.Resultats.sujets,
+        NBresultats: state.recherche.Resultats.NBresultats,
+        page: state.recherche.Resultats.page,
         elementsCoches: state.recherche.elementsCoches,
         menuOptions: state.recherche.elementsMenu,
         affichage: state.recherche.options.affichage

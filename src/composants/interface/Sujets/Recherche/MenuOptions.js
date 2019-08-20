@@ -1,55 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
 const Conteneur = styled.div`
-    min-width: 139px;
-    background-color: rgba(255, 238, 212, 1);
+    padding: 4px;
+    background-color: rgba(120, 120, 120, 1);
     position: absolute;
-    top: 60px;
-    left: 250px;
+    top: 0;
+    left: 0;
     cursor: pointer;
     user-select: none;
     box-shadow: 3px 3px 5px 2px rgba(0, 0, 0, 0.2);
-    z-index: 100;
-    &::after {
-        content: "";
-        position: absolute;
-        left: -10px;
-        top: 10px;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 10px 10px 10px 0;
-        border-color: transparent rgba(255, 238, 212, 1) transparent transparent;
-    }
+    z-index: 102;
+    display: inline-flex;
+    flex-direction: column;
 `;
 
 const Champ = styled.div`
     font-family: "Century Gothic";
-    padding: 10px;
+    padding-left: 10px;
+    min-width: 150px;
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 1px;
-
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.1);
-    }
+    color: white;
+    font-size: 0.9em;
+    height: 15px;
+    padding-bottom:2px;
+`;
+const InterChamp = styled.div`
+    height: 2px;
 `;
 
-const Validation = () => {
-    return (
-        <svg height="15" width="15" viewBox="0 0 450 450">
-            <polygon
-                fill="green"
-                points="143.294,340.058 50.837,247.602 0,298.439 122.009,420.447 122.149,420.306 
-			144.423,442.58 488.878,98.123 437.055,46.298"
-            />
-        </svg>
-    );
-};
-
 const MenuOptions = (props) => {
+    let ChampN = document
+        .getElementById(`Champ-${props.menu}`)
+        .getBoundingClientRect();
+    let MenuN = document.getElementById("Menu").getBoundingClientRect();
+    let offsetX = `${ChampN.top - MenuN.bottom}px`;
+    let offsetY = `${ChampN.right - ChampN.left + 5}px`;
+
     const verifNotion = (tt) => {
         let newState = [];
         if (props.elementsCoches[props.menu].includes(tt)) {
@@ -70,23 +58,48 @@ const MenuOptions = (props) => {
     };
 
     const MapNot = () => {
-        return props.elementsMenu[props.menu].map((el) => {
+        return props.elementsMenu[props.menu].map((el, index) => {
             return (
-                <Champ
-                    key={el[Object.keys(el)]}
-                    onClick={() => verifNotion(el[Object.keys(el)])}
+                <div
+                    key={`Div-${el[Object.keys(el)[0]]}`}
+                    id={`Div-${el[Object.keys(el)[0]]}`}
+                    style={{ display: "inlineFlex" }}
                 >
-                    {el[Object.keys(el)]}
-                    {props.elementsCoches[props.menu].includes(
-                        el[Object.keys(el)]
-                    ) && <Validation />}
-                </Champ>
+                    <Champ
+                        key={el[Object.keys(el)[0]]}
+                        id={el[Object.keys(el)[0]]}
+                        onClick={() => verifNotion(el[Object.keys(el)[0]])}
+                        style={{
+                            backgroundColor: !props.elementsCoches[
+                                props.menu
+                            ].includes(el[Object.keys(el)[0]])
+                                ? `rgba(0,0,0,0.18)`
+                                : `rgba(76,159,128,1)`,
+                            hover: { backgroundColor: "rgba(0, 0, 0, 0.1);" }
+                        }}
+                    >
+                        {props.menu[0] !== "annees"
+                            ? el[Object.keys(el)[0]].charAt(0).toUpperCase() +
+                              el[Object.keys(el)[0]].slice(1).toLowerCase()
+                            : el[Object.keys(el)[0]]}
+                    </Champ>
+                    {index + 1 < props.elementsMenu[props.menu].length && (
+                        <InterChamp
+                            key={`InterChamp-${el[Object.keys(el)[0]]}`}
+                            id={`InterChamp-${el[Object.keys(el)[0]]}`}
+                        />
+                    )}
+                </div>
             );
         });
     };
 
     return (
-        <Conteneur>
+        <Conteneur
+            className="MenuOuvert"
+            id={`Options-${props.menu}`}
+            style={{ top: offsetX, left: offsetY }}
+        >
             <MapNot />
         </Conteneur>
     );
@@ -96,7 +109,8 @@ const mapStateToProps = (state) => {
     return {
         elementsMenu: state.recherche.elementsMenu,
         elementsCoches: state.recherche.elementsCoches,
-        menu: state.recherche.MenuOptions.menu
+        menu: state.recherche.MenuOptions.menu,
+        MenuOuvert: state.recherche.MenuOptions.etat
     };
 };
 

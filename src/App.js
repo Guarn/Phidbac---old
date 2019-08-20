@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-
+import { connect } from "react-redux";
 import Menu from "./composants/interface/Menu";
 import Entete from "./composants/interface/Entete";
-import Sujets from "./composants/interface/Sujets";
+import Sujets from "./composants/interface/Sujets/Sujets";
 import Home from "./composants/interface/Home";
 import Cours from "./composants/interface/Cours/Cours";
 
@@ -20,9 +20,24 @@ const ConteneurPage = styled.div`
     min-height: 100vh;
 `;
 
+const PAPA = styled.div`
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    overflow: none;
+    z-index: 101;
+`;
+
 const App = (props) => {
+    const FermetureMenu = () => {
+        props.dispatch({ type: "MENU_SWITCH", value: props.NomMenuOuvert });
+    };
     return (
         <Router>
+            {props.MenuOuvert && (
+                <PAPA id="PAPA" onClick={() => FermetureMenu()} />
+            )}
             <ConteneurGlobal>
                 <ConteneurPage>
                     <Entete />
@@ -39,4 +54,11 @@ const App = (props) => {
     );
 };
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        MenuOuvert: state.recherche.MenuOptions.etat,
+        NomMenuOuvert: state.recherche.MenuOptions.menu
+    };
+};
+
+export default connect(mapStateToProps)(App);

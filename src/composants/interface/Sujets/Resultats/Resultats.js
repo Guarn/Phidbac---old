@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { connect } from "react-redux";
+import { numberLiteralTypeAnnotation } from "@babel/types";
 
 const Conteneur = styled.div`
     flex: 9;
@@ -181,14 +182,12 @@ const Resultats = (props) => {
         dispatch({ type: "AFFICHAGE", value: "reduit" });
     };
     useEffect(() => {
-        console.log("USEEFFECT");
         ax.post("/resultats", { elementsCoches })
             .then((rep) => dispatch({ type: "RESULTATS", value: rep }))
             .catch((err) => console.log(err));
     }, [elementsCoches]);
 
     const sujetSuivant = () => {
-        console.log("SUITE");
         dispatch({ type: "SUJET_SUIVANT", action: true });
     };
     const sujetPrecedent = () => {
@@ -253,7 +252,6 @@ const Resultats = (props) => {
                         el.Notions1.includes(not)
                     ) {
                         listeSujets.push(el.id);
-                        console.log(listeSujets);
                         return (
                             <ConteneurResultats>
                                 <ConteneurSujets>
@@ -269,12 +267,12 @@ const Resultats = (props) => {
                                 </ConteneurSujets>
                             </ConteneurResultats>
                         );
-                    } else if (
+                    }
+                    if (
                         !listeSujets.includes(el.id) &&
                         el.Notions2.includes(not)
                     ) {
                         listeSujets.push(el.id);
-                        console.log(listeSujets);
                         return (
                             <ConteneurResultats>
                                 <ConteneurSujets>
@@ -290,12 +288,12 @@ const Resultats = (props) => {
                                 </ConteneurSujets>
                             </ConteneurResultats>
                         );
-                    } else if (
+                    }
+                    if (
                         !listeSujets.includes(el.id) &&
                         el.Notions3.includes(not)
                     ) {
                         listeSujets.push(el.id);
-                        console.log(listeSujets);
                         return (
                             <ConteneurResultats>
                                 <ConteneurSujets>
@@ -336,22 +334,28 @@ const Resultats = (props) => {
                     <Ligne />
                 </Choix>
             </ConteneurChoix>
-            <ConteneurNumeroSujet>
-                <SujetAvantApres onClick={() => sujetPrecedent(page)}>
-                    {"<"}
-                </SujetAvantApres>
-                <NombreSujet>{`${page} / ${NBresultats}`}</NombreSujet>
-                <SujetAvantApres onClick={() => sujetSuivant(page)}>
-                    {">"}
-                </SujetAvantApres>
-            </ConteneurNumeroSujet>
+            {NBresultats > 0 && (
+                <ConteneurNumeroSujet>
+                    <SujetAvantApres onClick={() => sujetPrecedent(page)}>
+                        {"<"}
+                    </SujetAvantApres>
+                    <NombreSujet>{`${page} / ${NBresultats}`}</NombreSujet>
+                    <SujetAvantApres onClick={() => sujetSuivant(page)}>
+                        {">"}
+                    </SujetAvantApres>
+                </ConteneurNumeroSujet>
+            )}
+            {NBresultats === 0 && (
+                <NombreSujet style={{ margin: "auto", marginTop: "20px" }}>
+                    Aucun sujet ne répond à ces critères.
+                </NombreSujet>
+            )}
             {resultats.length > 0 && <MapSujets />}
         </Conteneur>
     );
 };
 
 const mapStateToProps = (state) => {
-    console.log("STATE");
     return {
         resultats: state.recherche.Resultats.sujets,
         NBresultats: state.recherche.Resultats.NBresultats,

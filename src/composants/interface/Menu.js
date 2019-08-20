@@ -48,7 +48,7 @@ const Menu = (props) => {
     };
 
     return (
-        <Conteneur>
+        <Conteneur id="Menu">
             {red && <Redirect push to={page} />}
             <Home onClick={() => han("/")}>
                 <img src={LogoMenu} alt="a" height="25" width="25" />

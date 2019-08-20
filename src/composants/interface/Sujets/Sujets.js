@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import Recherche from "./Recherche";
+import Recherche from "./Recherche/Recherche";
 import axios from "axios";
 import { connect } from "react-redux";
 import Resultats from "./Resultats/Resultats";
@@ -13,14 +13,12 @@ const ConteneurGlobalSujets = styled.div`
 `;
 
 const ax = axios.create({
-    baseURL: "http://78.211.168.197:4000/",
+    baseURL: `http://192.168.0.85:4000/`,
     responseType: "json"
 });
 
 const Sujets = (props) => {
-    const { resultats } = props;
     useEffect(() => {
-        console.log("Appel Menu");
         ax.get("/menu")
             .then((t) => props.dispatch({ type: "MENU", value: t }))
             .catch((err) => console.log(err));
@@ -43,7 +41,8 @@ const Sujets = (props) => {
 const mapsStateToProps = (state) => {
     return {
         menu: state.recherche.elementsMenu,
-        resultats: state.recherche.Resultats.sujets
+        resultats: state.recherche.Resultats.sujets,
+        nomMenuOuvert: state.recherche.MenuOptions
     };
 };
 

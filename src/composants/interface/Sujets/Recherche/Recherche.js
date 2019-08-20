@@ -15,6 +15,7 @@ const ConteneurRecherche = styled.div`
 const ConteneurFiltre = styled.div`
     display: flex;
     flex-direction: column;
+    z-index: 102;
 `;
 
 const Titre = styled.div`
@@ -59,6 +60,7 @@ const Recherche = (props) => {
             return (
                 <Champ
                     key={`Champ-${nom[0]}`}
+                    id={`Champ-${nom[0]}`}
                     onClick={() => menuEtat(Object.keys(el))}
                 >
                     <ChampTitre key={`ChampTitre-${nom[0]}`}>
@@ -85,7 +87,6 @@ const Recherche = (props) => {
 
     const menuEtat = (nomFiltre) => {
         props.dispatch({ type: "MENU_SWITCH", value: nomFiltre });
-        console.log(nomFiltre);
     };
 
     return (

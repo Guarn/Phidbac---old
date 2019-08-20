@@ -40,20 +40,29 @@ function Reducers(state = etatInitial, action) {
                     ...state.recherche,
                     elementsMenu: {
                         menu: [...state.recherche.elementsMenu.menu],
-                        notions: action.value.data.notions,
-                        series: action.value.data.series,
-                        annees: action.value.data.annees,
-                        destinations: action.value.data.destinations,
-                        auteurs: action.value.data.auteurs,
-                        sessions: action.value.data.sessions
+                        notions: action.value.data.notions.sort((a, b) =>
+                            a.Notion.localeCompare(b.Notion)
+                        ),
+                        series: action.value.data.series.sort((a, b) =>
+                            a.Serie.localeCompare(b.Serie)
+                        ),
+                        annees: action.value.data.annees.sort(
+                            (a, b) => a.Annee - b.Annee
+                        ),
+                        destinations: action.value.data.destinations.sort(
+                            (a, b) => a.Destination.localeCompare(b.Destination)
+                        ),
+                        auteurs: action.value.data.auteurs.sort((a, b) =>
+                            a.Auteur.localeCompare(b.Auteur)
+                        ),
+                        sessions: action.value.data.sessions.sort((a, b) =>
+                            a.Session.localeCompare(b.Session)
+                        )
                     }
                 }
             };
-            console.log("Infos menu");
-            console.log(nextState);
             return nextState || state;
         case "RESULTATS":
-            console.log(action);
             nextState = {
                 recherche: {
                     ...state.recherche,
@@ -65,9 +74,6 @@ function Reducers(state = etatInitial, action) {
                     }
                 }
             };
-
-            console.log("MAJ Résultats");
-            console.log(nextState);
             return nextState || state;
         case "SUJET_SUIVANT":
             if (
@@ -94,9 +100,6 @@ function Reducers(state = etatInitial, action) {
                     }
                 };
             }
-
-            console.log("MAJ PAGE");
-            console.log(nextState);
             return nextState || state;
         case "SUJET_PRECEDENT":
             console.log(action);
@@ -121,9 +124,6 @@ function Reducers(state = etatInitial, action) {
                     }
                 };
             }
-
-            console.log("MAJ PAGE");
-            console.log(nextState);
             return nextState || state;
         case "AFFICHAGE":
             nextState = {
@@ -132,9 +132,6 @@ function Reducers(state = etatInitial, action) {
                     options: { affichage: action.value }
                 }
             };
-
-            console.log("MAJ Résultats");
-            console.log(nextState);
             return nextState || state;
         case "ELEMENTS_COCHES":
             nextState = {
@@ -146,12 +143,8 @@ function Reducers(state = etatInitial, action) {
                     }
                 }
             };
-            console.log("MAJ cases cochées");
             return nextState || state;
         case "MENU_SWITCH":
-            console.log(action.value[0]);
-            console.log(state.recherche.MenuOptions.menu);
-            console.log(action.value === state.recherche.MenuOptions.menu);
             if (
                 action.value[0] === state.recherche.MenuOptions.menu[0] &&
                 state.recherche.MenuOptions.etat
@@ -165,7 +158,6 @@ function Reducers(state = etatInitial, action) {
                         }
                     }
                 };
-                console.log(`Menu ${action.value} fermé`);
             } else {
                 nextState = {
                     recherche: {
@@ -176,7 +168,6 @@ function Reducers(state = etatInitial, action) {
                         }
                     }
                 };
-                console.log(`Menu ${action.value} ouvert`);
             }
             return nextState || state;
 

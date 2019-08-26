@@ -13,12 +13,13 @@ const ConteneurGlobalSujets = styled.div`
 `;
 
 const ax = axios.create({
-    baseURL: `http://192.168.0.85:4000/`,
+    baseURL: `http://78.211.168.197:4000/`,
     responseType: "json"
 });
 
 const Sujets = (props) => {
     useEffect(() => {
+        console.log("RENDU PAGE SUJETS");
         ax.get("/menu")
             .then((t) => props.dispatch({ type: "MENU", value: t }))
             .catch((err) => console.log(err));
@@ -29,6 +30,7 @@ const Sujets = (props) => {
                 .catch((err) => console.log(err));
         }*/
     }, []);
+
     return (
         <ConteneurGlobalSujets>
             <Recherche />
@@ -51,7 +53,7 @@ export default connect(mapsStateToProps)(Sujets);
 /* Version d'origine
 
 const ax = axios.create({
-  baseURL: "http://192.168.0.85:4000/",
+  baseURL: "http://78.211.168.197:4000/",
   responseType: "json"
 });
 

@@ -6,7 +6,7 @@
 .dialog-enter-active {
     opacity: 1;
     transform: translateX(0px);
-    transition: all 200ms;
+    transition: all 100ms;
 }
 
 .dialog-exit {
@@ -17,5 +17,13 @@
 .dialog-exit-active {
     opacity: 0.01;
     transform: translateX(-10px);
-    transition: all 200ms;
+    transition: all 100ms;
+}
+
+.Champ:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.InterChamp {
+    background-color: rgba(120, 120, 120, 1);
 }

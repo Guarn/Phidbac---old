@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import "./index.css";
 
 const Conteneur = styled.div`
     padding: 4px;
@@ -24,13 +25,29 @@ const Champ = styled.div`
     color: white;
     font-size: 0.9em;
     height: 15px;
-    padding-bottom:2px;
+    padding-bottom: 2px;
+    background-color: ${(props) =>
+        props.actif ? `rgba(0,0,0,0.18)` : `rgba(76,159,128,1)`};
 `;
 const InterChamp = styled.div`
     height: 2px;
 `;
 
+const ConteneurColonne = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
+const Colonne = styled.div``;
+
 const MenuOptions = (props) => {
+    let date1;
+    let date2;
+    useEffect(() => {
+        return () => {
+            console.log("MENU WIIL UNMOOUT");
+        };
+    }, []);
     let ChampN = document
         .getElementById(`Champ-${props.menu}`)
         .getBoundingClientRect();
@@ -39,6 +56,9 @@ const MenuOptions = (props) => {
     let offsetY = `${ChampN.right - ChampN.left + 5}px`;
 
     const verifNotion = (tt) => {
+        date1 = Date.now();
+        console.log(date1);
+
         let newState = [];
         if (props.elementsCoches[props.menu].includes(tt)) {
             let index = props.elementsCoches[props.menu].findIndex(
@@ -58,24 +78,114 @@ const MenuOptions = (props) => {
     };
 
     const MapNot = () => {
+        console.log("FCT MENU OPTIONS");
+        useEffect(() => {
+            date2 = Date.now();
+
+            console.log(date1);
+            console.log(date2);
+            console.log(date2 - date1);
+            console.log("RENDU MENU OPTIONS");
+        }, []);
+        if (props.menu[0] === "auteurs") {
+            let Elements = [...props.elementsMenu[props.menu]];
+            let NouvelleListe = [];
+            while (Elements.length > 0) {
+                let test = Elements.splice(0, 20);
+                NouvelleListe.push(test);
+            }
+
+            const Colonnes = () => {
+                return NouvelleListe.map((col, index) => {
+                    return (
+                        <Colonne
+                            style={index !== 0 ? { marginLeft: "4px" } : {}}
+                            key={`Colonne-${index}`}
+                        >
+                            {NouvelleListe[index].map((elCol, indexEl) => {
+                                return (
+                                    <div
+                                        key={`Inutile-${indexEl}`}
+                                        className="Champ"
+                                    >
+                                        <Champ
+                                            key={elCol[Object.keys(elCol)[0]]}
+                                            id={elCol[Object.keys(elCol)[0]]}
+                                            onClick={() =>
+                                                verifNotion(
+                                                    elCol[Object.keys(elCol)[0]]
+                                                )
+                                            }
+                                            style={{
+                                                backgroundColor: !props.elementsCoches[
+                                                    props.menu
+                                                ].includes(
+                                                    elCol[Object.keys(elCol)[0]]
+                                                )
+                                                    ? `rgba(0,0,0,0.18)`
+                                                    : `rgba(76,159,128,1)`
+                                            }}
+                                        >
+                                            {elCol[Object.keys(elCol)[0]]
+                                                .charAt(0)
+                                                .toUpperCase() +
+                                                elCol[Object.keys(elCol)[0]]
+                                                    .slice(1)
+                                                    .toLowerCase() +
+                                                " (" +
+                                                elCol.NbSujets +
+                                                ")"}
+                                        </Champ>
+                                        {indexEl + 1 <
+                                            NouvelleListe[index].length && (
+                                            <InterChamp
+                                                className="InterChamp"
+                                                key={`InterChamp-${
+                                                    elCol[Object.keys(elCol)[0]]
+                                                }`}
+                                                id={`InterChamp-${
+                                                    elCol[Object.keys(elCol)[0]]
+                                                }`}
+                                            />
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </Colonne>
+                    );
+                });
+            };
+            return (
+                <ConteneurColonne>
+                    <Colonnes />
+                </ConteneurColonne>
+            );
+        }
         return props.elementsMenu[props.menu].map((el, index) => {
             return (
                 <div
                     key={`Div-${el[Object.keys(el)[0]]}`}
                     id={`Div-${el[Object.keys(el)[0]]}`}
                     style={{ display: "inlineFlex" }}
+                    className="Champ"
                 >
                     <Champ
                         key={el[Object.keys(el)[0]]}
                         id={el[Object.keys(el)[0]]}
                         onClick={() => verifNotion(el[Object.keys(el)[0]])}
+                        actif={
+                            !props.elementsCoches[props.menu].includes(
+                                el[Object.keys(el)[0]]
+                            )
+                                ? false
+                                : true
+                        }
                         style={{
                             backgroundColor: !props.elementsCoches[
                                 props.menu
                             ].includes(el[Object.keys(el)[0]])
                                 ? `rgba(0,0,0,0.18)`
-                                : `rgba(76,159,128,1)`,
-                            hover: { backgroundColor: "rgba(0, 0, 0, 0.1);" }
+                                : `rgba(76,159,128,1)`
                         }}
                     >
                         {props.menu[0] !== "annees"
@@ -85,6 +195,7 @@ const MenuOptions = (props) => {
                     </Champ>
                     {index + 1 < props.elementsMenu[props.menu].length && (
                         <InterChamp
+                            className="InterChamp"
                             key={`InterChamp-${el[Object.keys(el)[0]]}`}
                             id={`InterChamp-${el[Object.keys(el)[0]]}`}
                         />

@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-import styled from "styled-components";
+import React from "react";
 import { connect } from "react-redux";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -14,7 +13,7 @@ class Cours extends React.Component {
 
     handleChange(value) {
         this.setState({ text: value });
-        console.log(this.props);
+        console.log(this.state);
     }
 
     modules = {
@@ -50,11 +49,19 @@ class Cours extends React.Component {
         "align",
         "size"
     ];
+    /*
+    <ReactQuill
+                theme="snow"
+                value={this.state.text}
+                onChange={this.handleChange}
+                modules={this.modules}
+                formats={this.formats}
+            />*/
 
     render() {
         return (
             <ReactQuill
-                theme="snow"
+                
                 value={this.state.text}
                 onChange={this.handleChange}
                 modules={this.modules}
@@ -66,7 +73,7 @@ class Cours extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        etat: state.recherch
+        etat: state.recherche
     };
 };
 

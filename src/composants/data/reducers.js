@@ -1,6 +1,6 @@
 const etatInitial = {
     recherche: {
-        options: { affichage: "complet", nbAffichageReduit: 10 },
+        options: { affichage: "complet", chargement: false },
         elementsMenu: {
             menu: [
                 { notions: "Notions" },
@@ -23,7 +23,9 @@ const etatInitial = {
             annees: [],
             destinations: [],
             auteurs: [],
-            sessions: []
+            sessions: [],
+            recherche: "",
+            typeRecherche: "tousLesMots"
         },
         Resultats: { sujets: [], page: 1, offset: 0, NBresultats: 0 },
         MenuOptions: { etat: false, menu: "" }
@@ -31,8 +33,8 @@ const etatInitial = {
 };
 
 function Reducers(state = etatInitial, action) {
-    let nextState;
     console.log(action);
+    let nextState;
     switch (action.type) {
         case "MENU":
             nextState = {
@@ -68,9 +70,29 @@ function Reducers(state = etatInitial, action) {
                     ...state.recherche,
                     Resultats: {
                         ...state.recherche.Resultats,
-                        page: 1,
+                        page: action.page,
                         sujets: action.value.data.rows,
-                        NBresultats: action.value.data.count
+                        NBresultats: action.value.data.count,
+                        offset: action.offset
+                    },
+                    options: {
+                        ...state.recherche.options,
+                        chargement: action.chargement
+                    }
+                }
+            };
+            return nextState || state;
+        case "RESET":
+            nextState = {
+                recherche: {
+                    ...state.recherche,
+                    elementsCoches: {
+                        ...state.recherche.elementsCoches,
+                        [action.value]: action.value === "recherche" ? "" : []
+                    },
+                    Resultats: {
+                        ...state.recherche.Resultats,
+                        page: 1
                     }
                 }
             };
@@ -89,6 +111,7 @@ function Reducers(state = etatInitial, action) {
                         }
                     }
                 };
+                return nextState || state;
             } else {
                 nextState = {
                     recherche: {
@@ -99,17 +122,34 @@ function Reducers(state = etatInitial, action) {
                         }
                     }
                 };
+                return nextState || state;
             }
-            return nextState || state;
+
         case "SUJET_PRECEDENT":
-            console.log(action);
-            if (state.recherche.Resultats.page === 1) {
+            if (
+                state.recherche.Resultats.page === 1 &&
+                state.recherche.Resultats.offset === 0
+            ) {
                 nextState = {
                     recherche: {
                         ...state.recherche,
                         Resultats: {
                             ...state.recherche.Resultats,
                             page: state.recherche.Resultats.NBresultats
+                        }
+                    }
+                };
+            } else if (
+                state.recherche.Resultats.page === 1 &&
+                state.recherche.Resultats.offset > 0
+            ) {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: 50,
+                            offset: state.recherche.Resultats.offset - 50
                         }
                     }
                 };
@@ -129,20 +169,75 @@ function Reducers(state = etatInitial, action) {
             nextState = {
                 recherche: {
                     ...state.recherche,
-                    options: { affichage: action.value }
+                    options: {
+                        ...state.recherche.options,
+                        affichage: action.value
+                    },
+                    Resultats: {
+                        ...state.recherche.Resultats,
+                        page: action.page,
+                        offset: action.offset
+                    }
+                }
+            };
+            return nextState || state;
+        case "CHARGEMENT":
+            nextState = {
+                recherche: {
+                    ...state.recherche,
+                    options: {
+                        ...state.recherche.options,
+                        chargement: action.value
+                    }
                 }
             };
             return nextState || state;
         case "ELEMENTS_COCHES":
-            nextState = {
-                recherche: {
-                    ...state.recherche,
-                    elementsCoches: {
-                        ...state.recherche.elementsCoches,
-                        [action.cat]: action.value
+            if (action.cat === "recherche" || action.cat === "typeRecherche") {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        elementsCoches: {
+                            ...state.recherche.elementsCoches,
+                            notions: [],
+                            series: [],
+                            annees: [],
+                            destinations: [],
+                            auteurs: [],
+                            sessions: [],
+                            [action.cat]: action.value
+                        },
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: 1
+                        },
+                        options: {
+                            ...state.recherche.options,
+                            affichage: "complet"
+                        }
                     }
-                }
-            };
+                };
+            } else {
+                nextState = {
+                    recherche: {
+                        ...state.recherche,
+                        elementsCoches: {
+                            ...state.recherche.elementsCoches,
+                            recherche: "",
+                            typeRecherche: "tousLesMots",
+                            [action.cat]: action.value
+                        },
+                        Resultats: {
+                            ...state.recherche.Resultats,
+                            page: 1
+                        },
+                        options: {
+                            ...state.recherche.options,
+                            affichage: "complet"
+                        }
+                    }
+                };
+            }
             return nextState || state;
         case "MENU_SWITCH":
             if (

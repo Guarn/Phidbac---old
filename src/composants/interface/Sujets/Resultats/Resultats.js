@@ -167,7 +167,6 @@ const BarreSepa = styled.div`
 `;
 
 const Resultats = (props) => {
-    console.log("FCT RESULTATS");
     const {
         elementsCoches,
         resultats,
@@ -189,7 +188,6 @@ const Resultats = (props) => {
     `;
 
     useEffect(() => {
-        console.log("RENDU RESULTATS");
 
         ax.post("/resultats", { elementsCoches, offset: 0 })
             .then((rep) => {
@@ -200,7 +198,6 @@ const Resultats = (props) => {
                     page: 1,
                     chargement: false
                 });
-                console.log("Reception resultats");
             })
             .catch((err) => console.log(err));
     }, [elementsCoches, dispatch]);
@@ -331,7 +328,6 @@ const Resultats = (props) => {
     };
 
     const MapSujets = () => {
-        console.log("FCT MAP SUJET");
         if (chargement) {
             return (
                 <NombreSujet style={{ margin: "auto", marginTop: "20px" }}>
@@ -698,7 +694,6 @@ const Resultats = (props) => {
 
                 let TexteS = [...resultats];
 
-                console.log(TexteS);
 
                 TexteS.map((elTexte) => {
                     if (
@@ -826,7 +821,6 @@ const Resultats = (props) => {
 
                 let TexteS = [...resultats];
 
-                console.log(TexteS);
 
                 TexteS.map((elTexte) => {
                     if (

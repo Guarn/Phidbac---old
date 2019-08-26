@@ -41,13 +41,7 @@ const ConteneurColonne = styled.div`
 const Colonne = styled.div``;
 
 const MenuOptions = (props) => {
-    let date1;
-    let date2;
-    useEffect(() => {
-        return () => {
-            console.log("MENU WIIL UNMOOUT");
-        };
-    }, []);
+    useEffect(() => {}, []);
     let ChampN = document
         .getElementById(`Champ-${props.menu}`)
         .getBoundingClientRect();
@@ -56,9 +50,6 @@ const MenuOptions = (props) => {
     let offsetY = `${ChampN.right - ChampN.left + 5}px`;
 
     const verifNotion = (tt) => {
-        date1 = Date.now();
-        console.log(date1);
-
         let newState = [];
         if (props.elementsCoches[props.menu].includes(tt)) {
             let index = props.elementsCoches[props.menu].findIndex(
@@ -78,15 +69,7 @@ const MenuOptions = (props) => {
     };
 
     const MapNot = () => {
-        console.log("FCT MENU OPTIONS");
-        useEffect(() => {
-            date2 = Date.now();
-
-            console.log(date1);
-            console.log(date2);
-            console.log(date2 - date1);
-            console.log("RENDU MENU OPTIONS");
-        }, []);
+        useEffect(() => {}, []);
         if (props.menu[0] === "auteurs") {
             let Elements = [...props.elementsMenu[props.menu]];
             let NouvelleListe = [];

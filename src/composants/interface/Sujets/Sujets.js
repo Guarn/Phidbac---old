@@ -19,7 +19,6 @@ const ax = axios.create({
 
 const Sujets = (props) => {
     useEffect(() => {
-        console.log("RENDU PAGE SUJETS");
         ax.get("/menu")
             .then((t) => props.dispatch({ type: "MENU", value: t }))
             .catch((err) => console.log(err));

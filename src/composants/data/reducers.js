@@ -33,7 +33,6 @@ const etatInitial = {
 };
 
 function Reducers(state = etatInitial, action) {
-    console.log(action);
     let nextState;
     switch (action.type) {
         case "MENU":
@@ -93,6 +92,10 @@ function Reducers(state = etatInitial, action) {
                     Resultats: {
                         ...state.recherche.Resultats,
                         page: 1
+                    },
+                    options: {
+                        ...state.recherche.optioons,
+                        affichage: "complet"
                     }
                 }
             };

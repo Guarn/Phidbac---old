@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import MenuOptions from "./MenuOptions";
 import { connect } from "react-redux";
@@ -121,11 +121,7 @@ const LigneOption = styled.div`
 `;
 
 const Recherche = (props) => {
-    console.log("FCT MENU COMPLET");
-    useEffect(() => {
-        console.log("RENDU MENU COMPLET");
-        return console.log("RRRRRR");
-    }, []);
+
     const [texte, setTexte] = useState("");
 
     const champAZero = useRef();

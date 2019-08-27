@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import styled from "styled-components";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
@@ -7,6 +7,7 @@ import Entete from "./composants/interface/Entete";
 import Sujets from "./composants/interface/Sujets/Sujets";
 import Home from "./composants/interface/Home";
 import Cours from "./composants/interface/Cours/Cours";
+
 
 const ConteneurGlobal = styled.div`
     background-color: rgba(94, 94, 94, 0.19);
@@ -42,12 +43,13 @@ const App = (props) => {
                 <ConteneurPage>
                     <Entete />
                     <Menu />
-
-                    <Switch>
-                        <Route exact path="/" component={Home} />
-                        <Route path="/Recherche" component={Sujets} />
-                        <Route path="/Cours" component={Cours} />
-                    </Switch>
+                    <Suspense fallback={<div>Cchargment...</div>}>
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route path="/Recherche" component={Sujets} />
+                            <Route path="/Cours" component={Cours} />
+                        </Switch>
+                    </Suspense>
                 </ConteneurPage>
             </ConteneurGlobal>
         </Router>

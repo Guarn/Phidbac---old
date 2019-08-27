@@ -4,9 +4,10 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import Menu from "./composants/interface/Menu";
 import Entete from "./composants/interface/Entete";
-import Sujets from "./composants/interface/Sujets/Sujets";
-import Home from "./composants/interface/Home";
-import Cours from "./composants/interface/Cours/Cours";
+
+const Sujets = (() => import("./composants/interface/Sujets/Sujets")) ;
+const Home = (() => import("./composants/interface/Home")) ;
+const Cours = (() => import("./composants/interface/Cours/Cours")) ;
 
 const ConteneurGlobal = styled.div`
     background-color: rgba(94, 94, 94, 0.19);

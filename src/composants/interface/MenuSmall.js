@@ -62,7 +62,7 @@ const BtnMenuSmall = styled.div`
     }
 `;
 
-const Menu = (props) => {
+const MenuSmall = (props) => {
     const [red, setRed] = useState(false);
     const [page, setPage] = useState("");
     let han = (UrlPage) => {
@@ -71,20 +71,13 @@ const Menu = (props) => {
     };
 
     return (
-        <Conteneur id="Menu">
+        <ConteneurSmall id="Menu">
             {red && <Redirect push to={page} />}
-            <Home onClick={() => han("/")}>
-                <img src={LogoMenu} alt="a" height="25" width="25" />
-            </Home>
-            <BtnMenu>le programme et les épreuves</BtnMenu>
-            <BtnMenu onClick={() => han("/Cours")}>le cours</BtnMenu>
-            <BtnMenu>les exercices</BtnMenu>
-            <BtnMenu onClick={() => han("/Recherche")}>les sujets</BtnMenu>
-            <BtnMenu>les index</BtnMenu>
-        </Conteneur>
+            <BtnMenuSmall>MENU</BtnMenuSmall>
+        </ConteneurSmall>
     );
 };
 
-const mapStateToProps = (state) => state;
+export const mapStateToProps = (state) => state;
 
-export default connect(mapStateToProps)(Menu);
+export default connect(mapStateToProps)(MenuSmall);

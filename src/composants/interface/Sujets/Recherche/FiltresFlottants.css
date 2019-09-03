@@ -1,0 +1,43 @@
+.my-node-enter {
+    opacity: 0;
+}
+.my-node-enter-active {
+    opacity: 1;
+    transition: opacity 200ms;
+}
+.my-node-exit {
+    opacity: 1;
+}
+.my-node-exit-active {
+    opacity: 0;
+    transition: opacity 200ms;
+}
+
+.filtres-enter {
+    transform: translateX(-100%);
+}
+.filtres-enter-active {
+    transform: translateX(0);
+    transition: all 200ms;
+}
+.filtres-exit {
+    transform: translateX(0);
+}
+.filtres-exit-active {
+    transform: translateX(-100%);
+    transition: all 200ms;
+}
+.filtres2-enter {
+    transform: translateX(100%);
+}
+.filtres2-enter-active {
+    transform: translateX(0);
+    transition: all 200ms;
+}
+.filtres2-exit {
+    transform: translateX(0);
+}
+.filtres2-exit-active {
+    transform: translateX(100%);
+    transition: all 200ms;
+}

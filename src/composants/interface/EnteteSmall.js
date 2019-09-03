@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import Logo from "../svg/Logo.png";
-import Bg from "../svg/Capture.jpg";
+import Bg from "../svg/Capture2.jpg";
 
 const ConteneurEnteteSmall = styled.div`
     display: flex;
@@ -11,7 +11,7 @@ const ConteneurEnteteSmall = styled.div`
 `;
 
 const LogosSmall = styled.div`
-    margin-left:10px;
+    margin-left: 10px;
     flex: 1;
     display: flex;
     justify-content: center;

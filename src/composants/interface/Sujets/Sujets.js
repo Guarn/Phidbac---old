@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, lazy, Suspense } from "react";
 import styled from "styled-components";
-import Recherche from "./Recherche/Recherche";
 import axios from "axios";
 import { connect } from "react-redux";
-import Resultats from "./Resultats/Resultats";
+import { Breakpoint } from "react-socks";
+
+const Recherche = lazy(() => import("./Recherche/Recherche"));
+const Resultats = lazy(() => import("./Resultats/Resultats"));
+const ResultatsSmall = lazy(() => import("./Resultats/ResultatsSmall"));
 
 const ConteneurGlobalSujets = styled.div`
     display: flex;
@@ -31,11 +34,32 @@ const Sujets = (props) => {
     }, []);
 
     return (
-        <ConteneurGlobalSujets>
-            <Recherche />
+        <Suspense
+            fallback={
+                <div
+                    style={{
+                        backgroundColor: "rgb(90,90,90)",
+                        height: "100vh",
+                        width: "100vw"
+                    }}
+                >
+                    Chargement...
+                </div>
+            }
+        >
+            <Breakpoint medium up>
+                <ConteneurGlobalSujets>
+                    <Recherche />
 
-            <Resultats />
-        </ConteneurGlobalSujets>
+                    <Resultats />
+                </ConteneurGlobalSujets>
+            </Breakpoint>
+            <Breakpoint small down>
+                <ConteneurGlobalSujets>
+                    <ResultatsSmall />
+                </ConteneurGlobalSujets>
+            </Breakpoint>
+        </Suspense>
     );
 };
 

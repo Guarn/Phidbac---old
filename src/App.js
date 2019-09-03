@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import styled from "styled-components";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
@@ -12,6 +12,13 @@ const Sujets = lazy(() => import("./composants/interface/Sujets/Sujets"));
 const Cours = lazy(() => import("./composants/interface/Cours/Cours"));
 const Entete = lazy(() => import("./composants/interface/Entete"));
 const EnteteSmall = lazy(() => import("./composants/interface/EnteteSmall"));
+const Indexx = lazy(() => import("./composants/interface/Indexx"));
+const FiltresFlottants = lazy(() =>
+    import("./composants/interface/Sujets/Recherche/FiltresFlottants")
+);
+const MenuOuvSmall = lazy(() =>
+    import("./composants/interface/Menu/MenuOuvSmall")
+);
 
 const ConteneurGlobal = styled.div`
     background-color: rgba(94, 94, 94, 0.19);
@@ -19,6 +26,7 @@ const ConteneurGlobal = styled.div`
 `;
 const ConteneurGlobalSmall = styled.div`
     background-color: rgba(90, 90, 90, 1);
+    min-height: 100vh;
 `;
 const ConteneurPage = styled.div`
     width: 1200px;
@@ -40,16 +48,9 @@ const PAPA = styled.div`
     overflow: none;
     z-index: 101;
 `;
-const PAPASmall = styled.div`
-    position: absolute;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    overflow: none;
-    z-index: 101;
-`;
 
 const App = (props) => {
+    const [menuMobile, setMenuMobile] = useState(false);
     const FermetureMenu = () => {
         props.dispatch({ type: "MENU_SWITCH", value: props.NomMenuOuvert });
     };
@@ -87,22 +88,41 @@ const App = (props) => {
                     </ConteneurGlobal>
                 </Breakpoint>
                 <Breakpoint small down>
-                    {props.MenuOuvert && (
-                        <PAPA id="PAPA" onClick={() => FermetureMenu()} />
+                    {props.menuFiltres && (
+                        <FiltresFlottants actif={props.menuFiltres} />
                     )}
+                    {menuMobile && (
+                        <MenuOuvSmall
+                            activation={() => setMenuMobile(!menuMobile)}
+                        />
+                    )}
+                    {!menuMobile && (
+                        <ConteneurGlobalSmall>
+                            <ConteneurPageSmall>
+                                <EnteteSmall />
+                                <MenuSmall
+                                    actif={menuMobile}
+                                    activation={() =>
+                                        setMenuMobile(!menuMobile)
+                                    }
+                                />
 
-                    <ConteneurGlobalSmall>
-                        <ConteneurPageSmall>
-                            <EnteteSmall />
-                            <MenuSmall />
-
-                            <Switch>
-                                <Route exact path="/" component={HomeSmall} />
-                                <Route path="/Recherche" component={Sujets} />
-                                <Route path="/Cours" component={Cours} />
-                            </Switch>
-                        </ConteneurPageSmall>
-                    </ConteneurGlobalSmall>
+                                <Switch>
+                                    <Route
+                                        exact
+                                        path="/"
+                                        component={HomeSmall}
+                                    />
+                                    <Route
+                                        path="/Recherche"
+                                        component={Sujets}
+                                    />
+                                    <Route path="/Cours" component={Cours} />
+                                    <Route path="/Index" component={Indexx} />
+                                </Switch>
+                            </ConteneurPageSmall>
+                        </ConteneurGlobalSmall>
+                    )}
                 </Breakpoint>
             </Router>
         </Suspense>
@@ -112,7 +132,8 @@ const App = (props) => {
 const mapStateToProps = (state) => {
     return {
         MenuOuvert: state.recherche.MenuOptions.etat,
-        NomMenuOuvert: state.recherche.MenuOptions.menu
+        NomMenuOuvert: state.recherche.MenuOptions.menu,
+        menuFiltres: state.recherche.MenuOptions.filtres
     };
 };
 

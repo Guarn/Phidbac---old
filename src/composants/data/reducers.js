@@ -28,7 +28,7 @@ const etatInitial = {
             typeRecherche: "tousLesMots"
         },
         Resultats: { sujets: [], page: 1, offset: 0, NBresultats: 0 },
-        MenuOptions: { etat: false, menu: "" }
+        MenuOptions: { etat: false, menu: "", filtres: false }
     }
 };
 
@@ -267,6 +267,18 @@ function Reducers(state = etatInitial, action) {
                     }
                 };
             }
+            return nextState || state;
+        case "FILTRES_SWITCH":
+            nextState = {
+                recherche: {
+                    ...state.recherche,
+                    MenuOptions: {
+                        ...state.recherche.MenuOptions,
+                        filtres: !state.recherche.MenuOptions.filtres
+                    }
+                }
+            };
+
             return nextState || state;
 
         default:

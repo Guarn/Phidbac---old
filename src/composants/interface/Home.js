@@ -25,6 +25,7 @@ const ConteneurBienvenue = styled.div`
     flex: 3;
     display: flex;
     flex-direction: column;
+    margin-right: 20px;
 `;
 const ConteneurBienvenueSmall = styled.div`
     flex: 3;
@@ -54,6 +55,7 @@ const InfosBienvenue = styled.div`
     margin-top: 20px;
     font-family: "Century Gothic";
     font-size: 1em;
+    text-align: justify;
 `;
 
 const TitreBienvenue = styled.div`

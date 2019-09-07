@@ -20,7 +20,7 @@ const ChampPassword = styled.input`
 `;
 
 const ax = axios.create({
-    baseURL: "http://localhost:4000/",
+    baseURL: "http://phidbac.fr:4000/",
     responseType: "json"
 });
 
@@ -32,7 +32,7 @@ function Indexx(props) {
     const deco = () => {
         props.cookies.remove("token", {
             path: "/",
-            domain: "localhost"
+            domain: "phidbac.fr"
         });
         if (props.cookies.get("token")) {
             console.log(props.cookies.get("token"));
@@ -61,7 +61,7 @@ function Indexx(props) {
                 console.log(ev);
                 props.cookies.set("token", "Bearer " + ev.data.token, {
                     path: "/",
-                    domain: "localhost"
+                    domain: "phidbac.fr"
                 });
                 setUser(ev.data.prenom);
             })

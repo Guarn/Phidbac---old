@@ -16,7 +16,7 @@ const ConteneurGlobalSujets = styled.div`
 `;
 
 const ax = axios.create({
-    baseURL: `http://78.211.168.197:4000/`,
+    baseURL: `http://phidbac.fr:4000/`,
     responseType: "json"
 });
 
@@ -76,7 +76,7 @@ export default connect(mapsStateToProps)(Sujets);
 /* Version d'origine
 
 const ax = axios.create({
-  baseURL: "http://78.211.168.197:4000/",
+  baseURL: "http://phidbac.fr:4000/",
   responseType: "json"
 });
 

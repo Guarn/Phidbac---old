@@ -6,13 +6,16 @@ import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import Store from "./composants/data/store";
 import { BreakpointProvider } from "react-socks";
+import { CookiesProvider } from "react-cookie";
 
 ReactDOM.render(
-    <BreakpointProvider>
-        <Provider store={Store}>
-            <App />
-        </Provider>
-    </BreakpointProvider>,
+    <CookiesProvider>
+        <BreakpointProvider>
+            <Provider store={Store}>
+                <App />
+            </Provider>
+        </BreakpointProvider>
+    </CookiesProvider>,
     document.getElementById("root")
 );
 

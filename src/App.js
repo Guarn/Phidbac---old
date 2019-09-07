@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { Breakpoint } from "react-socks";
+import { withCookies } from "react-cookie";
 
 const Menu = lazy(() => import("./composants/interface/Menu"));
 const MenuSmall = lazy(() => import("./composants/interface/MenuSmall"));
@@ -83,6 +84,12 @@ const App = (props) => {
                                 <Route exact path="/" component={Home} />
                                 <Route path="/Recherche" component={Sujets} />
                                 <Route path="/Cours" component={Cours} />
+                                <Route
+                                    path="/Programme"
+                                    render={() => (
+                                        <Indexx cookies={props.cookies} />
+                                    )}
+                                />
                             </Switch>
                         </ConteneurPage>
                     </ConteneurGlobal>
@@ -137,4 +144,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(App);
+export default withCookies(connect(mapStateToProps)(App));

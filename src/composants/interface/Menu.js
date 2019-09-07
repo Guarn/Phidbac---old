@@ -76,7 +76,10 @@ const Menu = (props) => {
                 >
                     <img src={LogoMenu} alt="a" height="25" width="25" />
                 </Home>
-                <BtnMenu actif={props.location.pathname === "/Programme"}>
+                <BtnMenu
+                    onClick={() => han("/Programme")}
+                    actif={props.location.pathname === "/Programme"}
+                >
                     Programme / épreuves
                 </BtnMenu>
                 <BtnMenu

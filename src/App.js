@@ -9,7 +9,6 @@ import {
 import { connect } from "react-redux";
 import { Breakpoint } from "react-socks";
 import { withCookies } from "react-cookie";
-import Admin from "./composants/interface/Admin/Admin";
 
 const Menu = lazy(() => import("./composants/interface/Menu"));
 const MenuSmall = lazy(() => import("./composants/interface/MenuSmall"));
@@ -76,81 +75,70 @@ const App = (props) => {
                 </div>
             }
         >
-            {admin && <Admin />}
-            {!admin && (
-                <Router>
-                    <Breakpoint medium up>
-                        {props.MenuOuvert && (
-                            <PAPA id="PAPA" onClick={() => FermetureMenu()} />
-                        )}
+            <Router>
+                <Breakpoint medium up>
+                    {props.MenuOuvert && (
+                        <PAPA id="PAPA" onClick={() => FermetureMenu()} />
+                    )}
 
-                        <ConteneurGlobal>
-                            <ConteneurPage>
-                                <Entete />
-                                <Menu />
+                    <ConteneurGlobal>
+                        <ConteneurPage>
+                            <Entete />
+                            <Menu />
+
+                            <Switch>
+                                <Route exact path="/" component={Home} />
+                                <Route path="/Recherche" component={Sujets} />
+                                <Route path="/Cours" component={Cours} />
+                                <Route
+                                    path="/Programme"
+                                    render={() => (
+                                        <Indexx cookies={props.cookies} />
+                                    )}
+                                />
+                            </Switch>
+                        </ConteneurPage>
+                    </ConteneurGlobal>
+                </Breakpoint>
+                <Breakpoint small down>
+                    {props.menuFiltres && (
+                        <FiltresFlottants actif={props.menuFiltres} />
+                    )}
+                    {menuMobile && (
+                        <MenuOuvSmall
+                            activation={() => setMenuMobile(!menuMobile)}
+                        />
+                    )}
+                    {!menuMobile && (
+                        <ConteneurGlobalSmall>
+                            <ConteneurPageSmall>
+                                <EnteteSmall />
+                                <MenuSmall
+                                    actif={menuMobile}
+                                    activation={() =>
+                                        setMenuMobile(!menuMobile)
+                                    }
+                                />
 
                                 <Switch>
-                                    <Route exact path="/" component={Home} />
+                                    <Route
+                                        exact
+                                        path="/"
+                                        component={HomeSmall}
+                                    />
                                     <Route
                                         path="/Recherche"
                                         component={Sujets}
                                     />
                                     <Route path="/Cours" component={Cours} />
-                                    <Route
-                                        path="/Programme"
-                                        render={() => (
-                                            <Indexx cookies={props.cookies} />
-                                        )}
-                                    />
+                                    <Route path="/Index" component={Indexx} />
                                 </Switch>
-                            </ConteneurPage>
-                        </ConteneurGlobal>
-                    </Breakpoint>
-                    <Breakpoint small down>
-                        {props.menuFiltres && (
-                            <FiltresFlottants actif={props.menuFiltres} />
-                        )}
-                        {menuMobile && (
-                            <MenuOuvSmall
-                                activation={() => setMenuMobile(!menuMobile)}
-                            />
-                        )}
-                        {!menuMobile && (
-                            <ConteneurGlobalSmall>
-                                <ConteneurPageSmall>
-                                    <EnteteSmall />
-                                    <MenuSmall
-                                        actif={menuMobile}
-                                        activation={() =>
-                                            setMenuMobile(!menuMobile)
-                                        }
-                                    />
-
-                                    <Switch>
-                                        <Route
-                                            exact
-                                            path="/"
-                                            component={HomeSmall}
-                                        />
-                                        <Route
-                                            path="/Recherche"
-                                            component={Sujets}
-                                        />
-                                        <Route
-                                            path="/Cours"
-                                            component={Cours}
-                                        />
-                                        <Route
-                                            path="/Index"
-                                            component={Indexx}
-                                        />
-                                    </Switch>
-                                </ConteneurPageSmall>
-                            </ConteneurGlobalSmall>
-                        )}
-                    </Breakpoint>
-                </Router>
-            )}
+                            </ConteneurPageSmall>
+                        </ConteneurGlobalSmall>
+                    )}
+                </Breakpoint>
+            </Router>
+            
         </Suspense>
     );
 };

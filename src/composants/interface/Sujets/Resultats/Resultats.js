@@ -3,6 +3,9 @@ import styled from "styled-components";
 import axios from "axios";
 import { connect } from "react-redux";
 import ReactHtmlParser from "react-html-parser";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import "react-quill/dist/quill.bubble.css";
 
 const Conteneur = styled.div`
     flex: 9;
@@ -188,7 +191,6 @@ const Resultats = (props) => {
     `;
 
     useEffect(() => {
-
         ax.post("/resultats", { elementsCoches, offset: 0 })
             .then((rep) => {
                 dispatch({
@@ -421,10 +423,6 @@ const Resultats = (props) => {
                             </TitreNotions>
                             <CorpsSujet
                                 id={`CorpsSujet-${resultats[page - 1].id}`}
-                                style={{
-                                    textAlign: "justify",
-                                    textJustify: "inter-word"
-                                }}
                             >
                                 {elementsCoches.typeRecherche === "exacte" &&
                                     ReactHtmlParser(
@@ -694,7 +692,6 @@ const Resultats = (props) => {
 
                 let TexteS = [...resultats];
 
-
                 TexteS.map((elTexte) => {
                     if (
                         !elTexte.Sujet1.includes("span") &&
@@ -820,7 +817,6 @@ const Resultats = (props) => {
                 mots.sort((a, b) => a.length - b.length);
 
                 let TexteS = [...resultats];
-
 
                 TexteS.map((elTexte) => {
                     if (

@@ -1,9 +1,15 @@
 import React, { lazy, Suspense, useState } from "react";
 import styled from "styled-components";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import {
+    BrowserRouter as Router,
+    Route,
+    Switch,
+    withRouter
+} from "react-router-dom";
 import { connect } from "react-redux";
 import { Breakpoint } from "react-socks";
 import { withCookies } from "react-cookie";
+import Admin from "./composants/interface/Admin/Admin";
 
 const Menu = lazy(() => import("./composants/interface/Menu"));
 const MenuSmall = lazy(() => import("./composants/interface/MenuSmall"));
@@ -55,6 +61,7 @@ const App = (props) => {
     const FermetureMenu = () => {
         props.dispatch({ type: "MENU_SWITCH", value: props.NomMenuOuvert });
     };
+    let admin = true;
     return (
         <Suspense
             fallback={
@@ -69,69 +76,81 @@ const App = (props) => {
                 </div>
             }
         >
-            <Router>
-                <Breakpoint medium up>
-                    {props.MenuOuvert && (
-                        <PAPA id="PAPA" onClick={() => FermetureMenu()} />
-                    )}
+            {admin && <Admin />}
+            {!admin && (
+                <Router>
+                    <Breakpoint medium up>
+                        {props.MenuOuvert && (
+                            <PAPA id="PAPA" onClick={() => FermetureMenu()} />
+                        )}
 
-                    <ConteneurGlobal>
-                        <ConteneurPage>
-                            <Entete />
-                            <Menu />
-
-                            <Switch>
-                                <Route exact path="/" component={Home} />
-                                <Route path="/Recherche" component={Sujets} />
-                                <Route path="/Cours" component={Cours} />
-                                <Route
-                                    path="/Programme"
-                                    render={() => (
-                                        <Indexx cookies={props.cookies} />
-                                    )}
-                                />
-                            </Switch>
-                        </ConteneurPage>
-                    </ConteneurGlobal>
-                </Breakpoint>
-                <Breakpoint small down>
-                    {props.menuFiltres && (
-                        <FiltresFlottants actif={props.menuFiltres} />
-                    )}
-                    {menuMobile && (
-                        <MenuOuvSmall
-                            activation={() => setMenuMobile(!menuMobile)}
-                        />
-                    )}
-                    {!menuMobile && (
-                        <ConteneurGlobalSmall>
-                            <ConteneurPageSmall>
-                                <EnteteSmall />
-                                <MenuSmall
-                                    actif={menuMobile}
-                                    activation={() =>
-                                        setMenuMobile(!menuMobile)
-                                    }
-                                />
+                        <ConteneurGlobal>
+                            <ConteneurPage>
+                                <Entete />
+                                <Menu />
 
                                 <Switch>
-                                    <Route
-                                        exact
-                                        path="/"
-                                        component={HomeSmall}
-                                    />
+                                    <Route exact path="/" component={Home} />
                                     <Route
                                         path="/Recherche"
                                         component={Sujets}
                                     />
                                     <Route path="/Cours" component={Cours} />
-                                    <Route path="/Index" component={Indexx} />
+                                    <Route
+                                        path="/Programme"
+                                        render={() => (
+                                            <Indexx cookies={props.cookies} />
+                                        )}
+                                    />
                                 </Switch>
-                            </ConteneurPageSmall>
-                        </ConteneurGlobalSmall>
-                    )}
-                </Breakpoint>
-            </Router>
+                            </ConteneurPage>
+                        </ConteneurGlobal>
+                    </Breakpoint>
+                    <Breakpoint small down>
+                        {props.menuFiltres && (
+                            <FiltresFlottants actif={props.menuFiltres} />
+                        )}
+                        {menuMobile && (
+                            <MenuOuvSmall
+                                activation={() => setMenuMobile(!menuMobile)}
+                            />
+                        )}
+                        {!menuMobile && (
+                            <ConteneurGlobalSmall>
+                                <ConteneurPageSmall>
+                                    <EnteteSmall />
+                                    <MenuSmall
+                                        actif={menuMobile}
+                                        activation={() =>
+                                            setMenuMobile(!menuMobile)
+                                        }
+                                    />
+
+                                    <Switch>
+                                        <Route
+                                            exact
+                                            path="/"
+                                            component={HomeSmall}
+                                        />
+                                        <Route
+                                            path="/Recherche"
+                                            component={Sujets}
+                                        />
+                                        <Route
+                                            path="/Cours"
+                                            component={Cours}
+                                        />
+                                        <Route
+                                            path="/Index"
+                                            component={Indexx}
+                                        />
+                                    </Switch>
+                                </ConteneurPageSmall>
+                            </ConteneurGlobalSmall>
+                        )}
+                    </Breakpoint>
+                </Router>
+            )}
         </Suspense>
     );
 };

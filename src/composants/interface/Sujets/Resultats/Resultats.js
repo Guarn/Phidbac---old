@@ -440,6 +440,7 @@ const Resultats = (props) => {
                     </ConteneurSujets>
                     <Details>
                         <PartieGauche>
+                            <Etiquette>{resultats[page - 1].id}</Etiquette>
                             <Etiquette>{resultats[page - 1].Annee}</Etiquette>
                             <Etiquette>{`${resultats[page - 1].Serie}`}</Etiquette>
                             <Etiquette>
